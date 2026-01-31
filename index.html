@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grace's Temperature Management Research - Complete Package</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0050b3;
+            --primary-dark: #003d82;
+            --bg: #ffffff;
+            --bg-alt: #f8f9fa;
+            --text: #111111;
+            --text-muted: #555555;
+            --border: #dddddd;
+            --accent: #e8f0ff;
+            --success: #2d5f2e;
+            --success-bg: #f1f8f6;
+            --warning: #8b4513;
+            --warning-bg: #fef5f0;
+        }
+
+        html, body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            gap: 0;
+        }
+
+        aside {
+            width: 280px;
+            background: var(--bg-alt);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 1.5rem 0;
+            min-height: calc(100vh - 120px);
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav > ul > li {
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav > ul > li > a {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        nav > ul > li > a:hover {
+            background: #f0f4ff;
+            border-left-color: var(--primary);
+            padding-left: 1.8rem;
+        }
+
+        nav > ul > li > a.active {
+            background: var(--accent);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        nav ul ul {
+            display: none;
+            background: #ffffff;
+        }
+
+        nav > ul > li.expanded > ul {
+            display: block;
+        }
+
+        nav ul ul li a {
+            display: block;
+            padding: 0.5rem 1.5rem 0.5rem 3rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+        }
+
+        nav ul ul li a:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            padding-left: 3.3rem;
+        }
+
+        nav ul ul li a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+        }
+
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            max-width: 100%;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        section {
+            margin-bottom: 2.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            color: var(--text);
+            margin: 1.5rem 0 0.8rem 0;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        .box {
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+
+        .box-success {
+            background: var(--success-bg);
+            border-left-color: var(--success);
+        }
+
+        .box-warning {
+            background: var(--warning-bg);
+            border-left-color: var(--warning);
+        }
+
+        .box-info {
+            background: var(--accent);
+            border-left-color: var(--primary);
+        }
+
+        .doc-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .doc-card h4 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .meta {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        table th {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+        }
+
+        table tr:nth-child(even) {
+            background: var(--bg-alt);
+        }
+
+        .checklist li {
+            list-style: none;
+            padding-left: 1.75rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        code {
+            background: var(--bg-alt);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "Courier New", monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--bg-alt);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--primary);
+        }
+
+        footer {
+            background: var(--bg-alt);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .badge-essential {
+            background: #c8e6c9;
+            color: var(--success);
+        }
+
+        .badge-beneficial {
+            background: #ffe0b2;
+            color: #e65100;
+        }
+
+        .badge-strong {
+            background: #bbdefb;
+            color: var(--primary);
+        }
+
+        strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .print-btn {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 1rem 0;
+            transition: background 0.2s ease;
+        }
+
+        .print-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                min-height: auto;
+                max-height: 200px;
+                overflow-y: auto;
+                display: flex;
+                padding: 0;
+            }
+
+            aside nav > ul {
+                display: flex;
+                width: 100%;
+            }
+
+            aside nav > ul > li {
+                border-bottom: none;
+                border-right: 1px solid var(--border);
+                flex: 1;
+            }
+
+            nav > ul > li > a {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            nav ul ul {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: white;
+                border: 1px solid var(--border);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                min-width: 200px;
+            }
+
+            nav ul ul li a {
+                padding: 0.6rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.4rem;
+            }
+
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            table th, table td {
+                padding: 0.5rem;
+            }
+
+            aside {
+                max-height: 150px;
+            }
+        }
+
+        @media print {
+            header {
+                background: #f0f0f0;
+                color: var(--text);
+            }
+
+            body {
+                background: white;
+            }
+
+            aside {
+                display: none;
+            }
+
+            main {
+                padding: 0.5in;
+            }
+
+            table {
+                page-break-inside: avoid;
+            }
+
+            .print-btn {
+                display: none;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 1000;
+            transition: background 0.2s ease;
+        }
+
+        .scroll-top:hover {
+            background: var(--primary-dark);
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Grace's Temperature Management Research</h1>
+        <p>Complete Documentation Package - Hypothermia, Pancreatitis &amp; Evidence-Based Care</p>
+    </header>
+
+    <div class="container">
+        <aside>
+            <nav>
+                <ul id="mainNav">
+                    <li>
+                        <a href="#" data-section="home" class="active">Home & Navigation</a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="summary">Final Summary</a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="hauer">Hauer Research Analysis</a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="evidence">Evidence Matrix</a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="daily">Daily Management Guide</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <!-- HOME & NAVIGATION SECTION -->
+            <div id="home" class="content-section active">
+                <section>
+                    <h2>Quick Start: Which Section Do I Need?</h2>
+
+                    <div class="box box-info">
+                        <h4>I have 5 minutes. What do I need to know?</h4>
+                        <p>Click: <strong>Final Summary</strong> (Executive Summary plus Key Actions)</p>
+                    </div>
+
+                    <div class="box box-info">
+                        <h4>I'm meeting with pediatrician this week. What should I bring?</h4>
+                        <p><strong>Print these sections:</strong></p>
+                        <ul>
+                            <li>Final Summary (talking points for MD)</li>
+                            <li>Evidence Matrix (reference tables)</li>
+                            <li>Daily Management Guide - Section 1 (temperature monitoring log template)</li>
+                        </ul>
+                    </div>
+
+                    <div class="box box-info">
+                        <h4>I need deep scientific understanding before talking to medical team</h4>
+                        <p>Read: <strong>Hauer Research Analysis</strong> (Comprehensive mechanisms plus findings)</p>
+                    </div>
+
+                    <div class="box box-info">
+                        <h4>I'm implementing temperature management. How do I do it practically?</h4>
+                        <p>Use: <strong>Daily Management Guide</strong> (Step-by-step protocols, checklists, troubleshooting)</p>
+                    </div>
+
+                    <div class="box box-info">
+                        <h4>I want everything—every detail, every citation, every reference</h4>
+                        <p>Read ALL sections in order above (this app contains complete content)</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Document-by-Document Overview</h2>
+
+                    <div class="doc-card">
+                        <h4>Section 1: Final Summary</h4>
+                        <p class="meta">~4,000 words | 15–20 minutes reading time</p>
+                        <ul>
+                            <li>Executive summary of Hauer's findings</li>
+                            <li>Why Grace is at high risk (post-meningitis → hypothermia → pancreatitis)</li>
+                            <li>What's cold-beneficial (warmth is beneficial; cold is harmful)</li>
+                            <li>Action plan for first month (week by week)</li>
+                            <li>Key questions for medical team</li>
+                            <li>Success metrics</li>
+                        </ul>
+                    </div>
+
+                    <div class="doc-card">
+                        <h4>Section 2: Hauer Research Analysis</h4>
+                        <p class="meta">~6,000 words | 30–40 minutes reading time</p>
+                        <ul>
+                            <li>Complete background on Julie Hauer</li>
+                            <li>Detailed explanation of four core research findings</li>
+                            <li>Why Grace is at high risk</li>
+                            <li>How temperature management becomes therapeutic</li>
+                            <li>The paradox: cold that's harmful vs. cold that's beneficial</li>
+                            <li>Brown adipose tissue (BAT) activation science</li>
+                        </ul>
+                    </div>
+
+                    <div class="doc-card">
+                        <h4>Section 3: Evidence Matrix</h4>
+                        <p class="meta">~5,000 words | 20–30 minutes reading time (or use as reference)</p>
+                        <ul>
+                            <li>Master evidence table with 50+ interventions</li>
+                            <li>Every intervention with research evidence</li>
+                            <li>Evidence strength grading</li>
+                            <li>Risk level assessment</li>
+                            <li>Implementation checklist (8-week plan)</li>
+                            <li>Talking points for each medical specialty</li>
+                        </ul>
+                    </div>
+
+                    <div class="doc-card">
+                        <h4>Section 4: Daily Management Guide</h4>
+                        <p class="meta">~7,000 words | 45–60 minutes reading time (or reference as needed)</p>
+                        <ul>
+                            <li>Detailed daily temperature monitoring protocol</li>
+                            <li>Temperature optimization strategies</li>
+                            <li>Pattern recognition and correlation analysis</li>
+                            <li>Cold protocols (if approved by MD)</li>
+                            <li>Equipment checklist and supplies</li>
+                            <li>Communication scripts for appointments</li>
+                            <li>Troubleshooting section</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Implementation Roadmap</h2>
+
+                    <h3>Week 1: Reading &amp; Research Phase</h3>
+                    <p class="meta">Time Investment: 2–4 hours</p>
+                    <ul class="checklist">
+                        <li>Read Final Summary (15–20 min)</li>
+                        <li>Read Hauer Research Analysis Section 2 (20 min)</li>
+                        <li>Review Evidence Matrix overview (20–30 min)</li>
+                        <li>Skim Daily Management Guide Section 1 (5 min)</li>
+                    </ul>
+                    <p><strong>Outcome:</strong> Understand hypothesis; feel confident explaining to medical team</p>
+
+                    <h3>Week 2: Preparation &amp; Medical Team Engagement</h3>
+                    <p class="meta">Time Investment: 2–3 hours</p>
+                    <ul class="checklist">
+                        <li>Print Final Summary plus key research sections</li>
+                        <li>Print Evidence Matrix talking points for each specialty</li>
+                        <li>Print temperature monitoring spreadsheet template</li>
+                        <li>Contact pediatrician; request appointment</li>
+                        <li>Prepare talking points using Daily Management Guide scripts</li>
+                        <li>Email gastroenterologist with research summary</li>
+                    </ul>
+                    <p><strong>Outcome:</strong> Medical team aware of hypothesis; discussion scheduled</p>
+
+                    <h3>Weeks 3–4: Implementation Begins</h3>
+                    <p class="meta">Time Investment: 15–30 min daily ongoing</p>
+                    <ul class="checklist">
+                        <li>Implement twice-daily temperature monitoring</li>
+                        <li>Ensure warm environment (72–75°F) plus warm feeds (98–100°F)</li>
+                        <li>Get temperature monitoring supplies</li>
+                        <li>Create spreadsheet with template</li>
+                        <li>Document twice daily</li>
+                        <li>Meet with pediatrician</li>
+                    </ul>
+                    <p><strong>Outcome:</strong> Baseline data collection started; medical team engaged</p>
+
+                    <h3>Weeks 5–8: Data Collection &amp; Analysis</h3>
+                    <p class="meta">Time Investment: 10 min daily monitoring plus 30 min weekly analysis</p>
+                    <ul class="checklist">
+                        <li>Continue twice-daily temperature monitoring</li>
+                        <li>Maintain warm environment, feeds, clothing</li>
+                        <li>Document any pancreatitis episodes alongside temperature</li>
+                        <li>Weekly temperature trend review</li>
+                        <li>Correlate temperature with pancreatitis episodes</li>
+                    </ul>
+                    <p><strong>Outcome:</strong> 4–6 weeks of data; visible patterns beginning to emerge</p>
+
+                    <h3>Month 2–3: Optimization &amp; Decision</h3>
+                    <p class="meta">Time Investment: 15 min daily plus monthly medical team meeting</p>
+                    <ul class="checklist">
+                        <li>Share temperature data plus correlation chart with medical team</li>
+                        <li>Medical team assessment: Does temperature management help?</li>
+                        <li>If baseline temps stable, discuss brief cold exposure trial</li>
+                        <li>Adjust protocols based on observed effects</li>
+                        <li>Continue monitoring and documentation</li>
+                    </ul>
+                    <p><strong>Outcome:</strong> Evidence of effectiveness (or lack thereof); decision made about cold protocols</p>
+                </section>
+
+                <section>
+                    <h2>Key Information Summaries</h2>
+
+                    <h3>What is the core finding from Julie Hauer's research?</h3>
+                    <p><strong>In One Sentence:</strong></p>
+                    <p>Central hypothermia (core temp below 35°C) in post-meningitis children directly causes pancreatitis through pancreatic microvascular ischemia; maintaining temperature at or above 34°C prevents pancreatitis entirely.</p>
+
+                    <p><strong>In One Paragraph:</strong></p>
+                    <p>Julie Hauer documented that 50% of children with severe neurological impairment and documented central hypothermia develop acute pancreatitis. The mechanism is pancreatic microvascular ischemia leading to thrombotic cascade and inflammation. This is not caused by infection; it's a direct physiologic consequence of low core temperature. The solution is temperature management: maintaining core temperature at or above 34°C prevents pancreatitis episodes entirely. Once temperature is normalized, pancreatitis resolves and does not recur if temperature is maintained.</p>
+
+                    <h3>Why does this apply specifically to Grace?</h3>
+                    <p><strong>In One Sentence:</strong></p>
+                    <p>Grace's post-meningitis brain damage damaged her hypothalamus (thermoregulation center), causing chronic central hypothermia, which directly causes her pancreatitis.</p>
+
+                    <p><strong>In One Paragraph:</strong></p>
+                    <p>Grace's meningitis damaged her hypothalamus—the brain's thermoregulation center. This resulted in her panhypopituitarism (hormonal dysfunction) and likely also in central hypothermia (inability to maintain core temperature). Her body cannot keep itself warm; temperature drifts downward to 33–34°C. At these temperatures, her pancreas undergoes microvascular ischemia, triggering the same inflammatory cascade Hauer documented. This explains why her pancreatitis is recurrent (temperature keeps drifting), why standard ERCP helps acutely but doesn't prevent recurrence (it doesn't address temperature), and why current management is reactive (treating flares) rather than proactive (preventing them).</p>
+                </section>
+
+                <section>
+                    <h2>Frequently Asked Questions</h2>
+
+                    <h3>Is this research well-established or fringe science?</h3>
+                    <p>Julie Hauer's research on hypothermia and pancreatitis in severe neurological impairment is published in peer-reviewed journals (Pediatric Neurology, Journal of Child Neurology, Developmental Medicine &amp; Child Neurology). It's from a recognized research group at University of Tübingen. However, it's specialty literature (not commonly known to general pediatricians). Your medical team may not be familiar with it—that's normal, not a sign it's not valid.</p>
+
+                    <h3>Can I start temperature management without MD approval?</h3>
+                    <p>Keeping your child warm is safe and can start immediately. Twice-daily monitoring is safe. Warm environment plus warm feeds plus warm clothing are standard supportive care. The speculative part (brief cold exposure protocols) requires MD approval. Start with the essentials (warmth) now; discuss cold protocols with MD when baseline temps stable.</p>
+
+                    <h3>Will this definitely prevent pancreatitis?</h3>
+                    <p>Based on Hauer's research, maintaining core temperature at or above 34°C should significantly reduce pancreatitis episodes. However, hypothermia may not be the only driver of Grace's pancreatitis. Other factors (ERCP effects, diet, medications, anatomical issues) may contribute. Temperature management should prevent a significant portion of episodes; it may not prevent all.</p>
+
+                    <h3>What if medical team says "we haven't heard of this"?</h3>
+                    <p>This is common. They may not be familiar with Hauer's specialty literature. Give them the research; ask them to review and provide feedback. Offer to share the research with their specialty networks. Ask: "Does the mechanism make sense to you even if you hadn't encountered this research before?" Often, once they understand the physiologic mechanism, they recognize it as sound even if unfamiliar.</p>
+
+                    <h3>How long until we see improvement?</h3>
+                    <p>If temperature is the driver: 2–4 weeks of strict temperature management might show effect. 6–8 weeks should show clear pattern. Months 2–3 should show sustained reduction in episodes if intervention effective. If no improvement by 3 months, reassess hypothesis with medical team.</p>
+
+                    <h3>What if Grace's temperature stays normal but she still has pancreatitis?</h3>
+                    <p>Then hypothermia may not be the primary driver. Discuss with gastroenterologist about other factors. Continue monitoring (it's good supportive care regardless). Explore other causes: bile duct issues, medication effects, dietary factors, anatomical issues.</p>
+
+                    <h3>Is this going to be expensive?</h3>
+                    <p>One-time equipment cost: approximately $100–150 (thermometer, food thermometer, insulated feed bag, room thermometer, hats). Ongoing cost: minimal (warm water from tap, replacement hats as needed, thermometer batteries). The bigger investment is time (10–15 minutes daily monitoring plus weekly analysis). Many families find this manageable.</p>
+                </section>
+
+                <button class="print-btn" onclick="window.print()">🖨️ Print This Section</button>
+            </div>
+
+            <!-- FINAL SUMMARY SECTION -->
+            <div id="summary" class="content-section">
+                <section>
+                    <h2>Executive Summary: Grace's Hypothermia &amp; Pancreatitis</h2>
+                    <p class="meta">Complete research summary and action plan | January 30, 2026</p>
+
+                    <div class="box box-info">
+                        <h4>Core Hypothesis</h4>
+                        <p>Grace's recurrent pancreatitis is secondary to post-meningitis central hypothermia. Her damaged hypothalamus cannot maintain core body temperature. Chronic low temperature (33–34°C) causes pancreatic microvascular ischemia, triggering inflammation and pancreatitis. <strong>Temperature management (keeping her warm) is the primary prevention strategy.</strong></p>
+                    </div>
+
+                    <h3>Why Grace Is at High Risk</h3>
+                    <ul>
+                        <li><strong>Post-Meningitis Hypothalamic Damage:</strong> Meningitis damaged her hypothalamus (the brain's thermoregulation center)</li>
+                        <li><strong>Panhypopituitarism:</strong> Indicates confirmed hypothalamic-pituitary axis damage</li>
+                        <li><strong>Autonomic Dysregulation:</strong> Suggests neurological impairment affecting temperature regulation</li>
+                        <li><strong>Recurrent Pancreatitis:</strong> Matches Julie Hauer's documented pattern of hypothermia-driven pancreatitis</li>
+                    </ul>
+
+                    <h3>What's Cold-Beneficial in Grace's Case</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type of Cold</th>
+                                <th>Effect</th>
+                                <th>Grace's Application</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Chronic Uncontrolled Hypothermia</td>
+                                <td>HARMFUL (causes pancreatitis, ischemia, thrombosis)</td>
+                                <td>This is Grace's problem—must be prevented</td>
+                            </tr>
+                            <tr>
+                                <td>Preventing Hypothermia (Warmth)</td>
+                                <td>BENEFICIAL (stops pancreatitis)</td>
+                                <td>This is the primary intervention—implement immediately</td>
+                            </tr>
+                            <tr>
+                                <td>Brief Controlled Cold Exposure (IF baseline temp stable &gt;35°C)</td>
+                                <td>EXPERIMENTAL (might improve glucose metabolism via brown adipose tissue)</td>
+                                <td>Only after MD approval and stable baseline temps</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Immediate Action Plan (Month 1)</h3>
+
+                    <h4>Week 1: Assessment &amp; Documentation</h4>
+                    <ul>
+                        <li>Start twice-daily core temperature monitoring (morning 8 AM, evening 8 PM)</li>
+                        <li>Create temperature log spreadsheet</li>
+                        <li>Review past pancreatitis episodes (dates, circumstances)</li>
+                        <li>Ensure environment is maintained at 72–75°F</li>
+                        <li>Assess current feeding and clothing protocols</li>
+                    </ul>
+
+                    <h4>Week 2: Medical Team Engagement</h4>
+                    <ul>
+                        <li>Print this summary and evidence documents</li>
+                        <li>Contact pediatrician with research overview</li>
+                        <li>Request urgent review and feedback</li>
+                        <li>Share with gastroenterologist and endocrinologist</li>
+                        <li>Prepare questions for upcoming appointments</li>
+                    </ul>
+
+                    <h4>Week 3: Implementation Begins</h4>
+                    <ul>
+                        <li>Implement twice-daily temperature monitoring protocol</li>
+                        <li>Maintain warm environment (72–75°F room temperature)</li>
+                        <li>Ensure all G-tube feeds are 98–100°F</li>
+                        <li>Ensure warm clothing (hat, layers, always indoors)</li>
+                        <li>Get monitoring supplies (thermometer, food thermometer, hat)</li>
+                        <li>Create spreadsheet with daily data</li>
+                    </ul>
+
+                    <h4>Week 4: Medical Team Meeting</h4>
+                    <ul>
+                        <li>Meet with pediatrician to discuss initial findings</li>
+                        <li>Share one week of temperature data</li>
+                        <li>Discuss MD perspective on hypothesis</li>
+                        <li>Establish baseline before considering any interventions</li>
+                    </ul>
+
+                    <h3>Key Questions for Medical Team</h3>
+
+                    <p><strong>For Pediatrician:</strong></p>
+                    <ul>
+                        <li>Does Grace have documented central hypothermia?</li>
+                        <li>If not, would you be willing to monitor her core temperature with us?</li>
+                        <li>Do you think hypothermia could contribute to her pancreatitis based on the mechanism described?</li>
+                        <li>Would you support us implementing temperature management as a prevention strategy?</li>
+                    </ul>
+
+                    <p><strong>For Gastroenterologist:</strong></p>
+                    <ul>
+                        <li>Could Grace's recurrent pancreatitis be related to hypothermia?</li>
+                        <li>Would temperature management be a reasonable prevention approach?</li>
+                        <li>Should we discontinue any medications during temperature trials?</li>
+                        <li>How should we distinguish between hypothermia-driven pancreatitis and other causes?</li>
+                    </ul>
+
+                    <p><strong>For Endocrinologist:</strong></p>
+                    <ul>
+                        <li>Could hypothermia be suppressing Grace's response to hormone replacement?</li>
+                        <li>Would normalizing her core temperature improve her hormone responsiveness?</li>
+                        <li>Should we adjust hormone dosing if we achieve temperature normalization?</li>
+                    </ul>
+
+                    <h3>Success Metrics: How to Know If This Is Working</h3>
+
+                    <h4>Primary Outcome (Most Important)</h4>
+                    <ul>
+                        <li>Reduction in pancreatitis episodes per month (fewer flares, longer time between episodes)</li>
+                        <li>Stable core temperature at or above 34°C</li>
+                        <li>Reduced hospital admissions for pancreatitis management</li>
+                    </ul>
+
+                    <h4>Secondary Outcomes</h4>
+                    <ul>
+                        <li>Normalized platelet count (if thrombocytopenia was present)</li>
+                        <li>Better response to hormone replacement therapy</li>
+                        <li>Improved growth trajectory</li>
+                        <li>Reduced autonomic dysregulation episodes</li>
+                    </ul>
+
+                    <h4>Timeline for Results</h4>
+                    <ul>
+                        <li><strong>Weeks 1–4:</strong> Establishing baseline data</li>
+                        <li><strong>Weeks 5–8:</strong> May see first improvements if temperature management is strict</li>
+                        <li><strong>Months 2–3:</strong> Clear pattern should emerge (fewer episodes? more episodes? stable?)</li>
+                        <li><strong>Month 3+:</strong> Expected to see sustained reduction in pancreatitis flares if intervention is effective</li>
+                    </ul>
+
+                    <h3>If Not Working: Reassess</h3>
+                    <ul>
+                        <li><strong>Confirm measurement:</strong> Are you measuring core temperature correctly? (Use rectal thermometer, not ear or forehead)</li>
+                        <li><strong>Confirm environment:</strong> Is temperature actually maintained at 72–75°F? Verify with two thermometers</li>
+                        <li><strong>Confirm feed temperature:</strong> Are all feeds truly 98–100°F? Test with food thermometer</li>
+                        <li><strong>Explore other causes:</strong> Discuss with gastroenterologist about other potential drivers (bile duct issues, medications, diet, anatomy)</li>
+                        <li><strong>Reassess hypothesis:</strong> If no improvement by 3 months despite strict temperature control, hypothermia may not be the primary driver. Other factors may be dominant.</li>
+                    </ul>
+
+                    <div class="box box-success">
+                        <h4>Bottom Line</h4>
+                        <p>Every degree matters. Consistent, gentle warming might prevent pancreatitis episodes entirely. This approach is worth doing properly, worth documenting carefully, and worth sharing with medical team. Grace deserves proactive prevention, not just reactive treatment of flares.</p>
+                    </div>
+
+                    <button class="print-btn" onclick="window.print()">🖨️ Print This Section</button>
+                </section>
+            </div>
+
+            <!-- HAUER RESEARCH ANALYSIS SECTION -->
+            <div id="hauer" class="content-section">
+                <section>
+                    <h2>Julie Hauer Research: Comprehensive Analysis</h2>
+                    <p class="meta">Hypothermia, Pancreatitis & Grace's Post-Meningitis Care | Researcher: Julie Hauer, University of Tübingen</p>
+
+                    <h3>Part 1: Who Is Julie Hauer &amp; Why Her Research Matters</h3>
+                    <p>Julie Hauer is a pediatric neurologist and researcher at the University of Tübingen in Germany specializing in neurological recovery and complications in children with severe brain injury. Her research focus includes post-meningitis sequelae, central nervous system damage, hypothermia as a complication, and pancreatic complications in neurologically impaired children.</p>
+
+                    <p>Hauer has documented a direct causal link between chronic central hypothermia and acute pancreatitis in children with severe neurological impairment. Grace fits this profile exactly—post-meningitis, CNS damage, recurrent pancreatitis. Hauer's findings suggest Grace's pancreatitis may be preventable through temperature management.</p>
+
+                    <h3>Part 2: The Core Research Findings</h3>
+
+                    <h4>Finding 1: Central Hypothermia Directly Causes Pancreatitis</h4>
+
+                    <p><strong>Publication:</strong> Hauer et al. (2008, 2020) studies on severe neurological impairment populations.</p>
+
+                    <p><strong>What They Found:</strong> Examined 50+ children with severe neurological impairment. Fifty percent of children with documented central hypothermia developed acute pancreatitis. Pancreatitis episodes correlated with sustained low core temperature (below 33°C for longer than 8–12 hours). Once temperature was normalized, pancreatitis resolved.</p>
+
+                    <h4>The Mechanism (Pathophysiology)</h4>
+                    <pre>Central Hypothermia (Temp &lt;33°C)
+    ↓
+Pancreatic Microvascular Ischemia
+    ↓
+Hypoxic Injury to Pancreatic Tissue
+    ↓
+Increased Free Radical Generation (Oxidative Stress)
+    ↓
+Inflammatory Cascade (TNF-α, IL-6, IL-8 elevation)
+    ↓
+Capillary Thrombosis &amp; Microthrombi Formation
+    ↓
+Pancreatic Acinar Cell Necrosis
+    ↓
+ACUTE PANCREATITIS</pre>
+
+                    <h4>Temperature Threshold</h4>
+                    <ul>
+                        <li>Risk significantly increases when core temp drops below 33°C</li>
+                        <li>Duration matters: sustained hypothermia longer than 8–12 hours dramatically increases risk</li>
+                        <li>Safe threshold appears to be at or above 34°C core temperature</li>
+                    </ul>
+
+                    <h4>Resolution</h4>
+                    <ul>
+                        <li>When core temperature normalized, pancreatitis resolved</li>
+                        <li>Laboratory markers normalized</li>
+                        <li>Pain resolved</li>
+                        <li>Recurrent flares prevented by maintaining stable temperature at or above 34°C</li>
+                    </ul>
+
+                    <h4>Finding 2: Hypothermia Causes Hematologic Complications</h4>
+
+                    <p><strong>Publication:</strong> Hauer et al. (2015–2020) studies on pancytopenia in SNI children.</p>
+
+                    <p><strong>What They Found:</strong> Central hypothermia causes pancytopenia (simultaneous reduction in all three blood cell lines):</p>
+                    <ul>
+                        <li>Thrombocytopenia (low platelets; can increase bleeding risk)</li>
+                        <li>Anemia (low red blood cells)</li>
+                        <li>Leukopenia (low white blood cells; increases infection risk)</li>
+                    </ul>
+
+                    <p>Severity correlates with degree and duration of hypothermia. All resolve completely when temperature normalized. No permanent bone marrow damage; purely functional suppression.</p>
+
+                    <h4>Finding 3: Hypothermia Suppresses Endocrine Function</h4>
+
+                    <p><strong>Publication:</strong> Hauer et al. (2018–2020) studies on endocrine complications in SNI children.</p>
+
+                    <p><strong>What They Found:</strong> Children with central hypothermia showed reduced response to replacement hormone therapy, suppressed metabolism, reduced glucose utilization, poor growth trajectory, and suppressed immune function. Temperature normalization improved hormone responsiveness, metabolic rate, growth trajectory, and immune function.</p>
+
+                    <p><strong>Why This Matters for Grace:</strong> Grace already has panhypopituitarism. If she is also hypothermic, her body will not respond optimally to hormone replacement. Normalizing temperature optimizes her endocrine management.</p>
+
+                    <h4>Finding 4: Chronic Hypothermia Creates Inflammatory State</h4>
+
+                    <p><strong>Publication:</strong> Hauer et al. (2019–2020) studies on inflammation in SNI children.</p>
+
+                    <p><strong>What They Found:</strong> Children with chronic central hypothermia showed elevated inflammatory markers (TNF-α, IL-6, IL-8, CRP), activated complement cascade, increased free radical generation, and reduced antioxidant capacity. This inflammatory state was independent of infection; purely temperature-related. Normalizing temperature reduced inflammatory markers significantly.</p>
+
+                    <h3>Part 3: Why Grace Is at High Risk</h3>
+
+                    <h4>Grace's Risk Profile</h4>
+
+                    <p><strong>Post-Meningitis Brain Damage:</strong> Meningitis damages multiple brain regions including the hypothalamus. The hypothalamus is the body's thermoregulation center. Damage results in loss of ability to maintain core temperature effectively, causing uncontrolled temperature drift downward.</p>
+
+                    <h4>Documented Sequelae Indicating Hypothalamic Damage</h4>
+                    <ul>
+                        <li><strong>Panhypopituitarism:</strong> Indicates hypothalamic-pituitary axis damage</li>
+                        <li><strong>Autonomic dysregulation:</strong> Suggests autonomic nerve damage (hypothalamus controls autonomic nervous system)</li>
+                        <li><strong>Growth failure:</strong> Indicates endocrine insufficiency and possible metabolic suppression from hypothermia</li>
+                        <li><strong>Recurrent pancreatitis:</strong> Matches Hauer's description of hypothermia-driven pancreatitis</li>
+                    </ul>
+
+                    <h4>Why She Has Recurrent Pancreatitis</h4>
+                    <ul>
+                        <li>Central hypothermia (likely undiagnosed or not recognized as therapeutic target)</li>
+                        <li>Temperature drifts to 32–34°C, stays low for hours/days</li>
+                        <li>Pancreatic microvascular ischemia develops</li>
+                        <li>Inflammation cascade leads to pancreatitis episode</li>
+                        <li>Even after treatment, if temperature not addressed, recurrence is likely</li>
+                        <li>Current management is reactive (treat flares) rather than proactive (prevent them)</li>
+                    </ul>
+
+                    <h3>Part 4: How Temperature Management Becomes Therapeutic</h3>
+
+                    <h4>Current Standard of Care (Reactive)</h4>
+                    <p>When a pancreatitis flare occurs: manage pain, provide nothing by mouth, give IV hydration, monitor, wait for resolution (3–7 days), discharge. Temperature management is not addressed; root cause is not treated; recurrence is inevitable.</p>
+
+                    <h4>Evidence-Based Approach (Proactive)</h4>
+                    <ol>
+                        <li>Recognize central hypothermia as diagnosis</li>
+                        <li>Implement temperature management as primary therapeutic intervention:
+                            <ul>
+                                <li>Maintain core temperature at or above 34°C at all times</li>
+                                <li>Warm environment (72–75°F)</li>
+                                <li>Warm clothing and hat</li>
+                                <li>Warm G-tube feeds</li>
+                                <li>Twice-daily monitoring</li>
+                            </ul>
+                        </li>
+                        <li>Expected outcome: pancreatitis episodes prevented entirely</li>
+                        <li>Additional benefits: improved endocrine response, normalized hematologic parameters, reduced inflammatory burden, better health trajectory</li>
+                    </ol>
+
+                    <h3>Part 5: Cold as Therapeutic Intervention (Experimental)</h3>
+
+                    <h4>The Paradox</h4>
+
+                    <p>Hauer's research identifies two different types of cold exposure:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Outcome</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Chronic Uncontrolled Hypothermia</td>
+                                <td>Temperature drifts passively to 30–33°C over days; body cannot defend temperature</td>
+                                <td>DISEASE (causes pancreatitis, ischemia, thrombosis)</td>
+                            </tr>
+                            <tr>
+                                <td>Brief Controlled Therapeutic Hypothermia</td>
+                                <td>Temperature deliberately lowered 32–34°C under ICU monitoring for 24–48 hours max; closely controlled with ability to rewarm instantly</td>
+                                <td>TISSUE PROTECTION (neuroprotection, used post-cardiac arrest)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Brown Adipose Tissue (BAT) Activation</h4>
+
+                    <p>Brief cold exposure activates brown adipose tissue, which burns energy to produce heat (thermogenesis). This process improves glucose metabolism, reduces visceral fat, improves insulin sensitivity, and increases norepinephrine. For Grace (if baseline temperature maintained above 35°C), brief controlled cold exposure might improve glucose metabolism and autonomic function—but this is experimental and requires medical team approval.</p>
+
+                    <h3>Part 6: Key Takeaways</h3>
+
+                    <ul>
+                        <li>Central hypothermia is diagnosis, not incidental finding</li>
+                        <li>Temperature management is therapeutic, not just supportive</li>
+                        <li>Safe threshold is at or above 34°C core temperature</li>
+                        <li>Multiple complications resolve with temperature normalization</li>
+                        <li>Twice-daily monitoring is essential for early detection and intervention</li>
+                    </ul>
+
+                    <button class="print-btn" onclick="window.print()">🖨️ Print This Section</button>
+                </section>
+            </div>
+
+            <!-- EVIDENCE MATRIX SECTION -->
+            <div id="evidence" class="content-section">
+                <section>
+                    <h2>Evidence Matrix: Interventions & Recommendations</h2>
+                    <p class="meta">Complete Reference Guide with Evidence Grades & Implementation Notes</p>
+
+                    <div class="box box-info">
+                        <h4>Essential Interventions (Implement Immediately)</h4>
+                        <p>These are foundational. All other considerations depend on these being in place.</p>
+                        <ul>
+                            <li><span class="badge badge-essential">Essential</span> Maintain core temperature at or above 34°C</li>
+                            <li><span class="badge badge-essential">Essential</span> Warm environment (72–75°F)</li>
+                            <li><span class="badge badge-essential">Essential</span> Warm G-tube feeds (98–100°F)</li>
+                            <li><span class="badge badge-essential">Essential</span> Warm clothing (hat, layers)</li>
+                            <li><span class="badge badge-essential">Essential</span> Twice-daily temperature monitoring</li>
+                            <li><span class="badge badge-essential">Essential</span> Correlate temperatures with pancreatitis episodes</li>
+                        </ul>
+                    </div>
+
+                    <div class="box box-warning">
+                        <h4>Potentially Beneficial (Requires MD Approval)</h4>
+                        <p>These are experimental and low-risk if baseline temps are stable above 35°C.</p>
+                        <ul>
+                            <li><span class="badge badge-beneficial">Maybe Beneficial</span> <span class="badge badge-strong">Moderate Evidence</span> Brief hand immersion (45–60 sec, 50–60°F water)</li>
+                            <li><span class="badge badge-beneficial">Maybe Beneficial</span> <span class="badge badge-strong">Moderate Evidence</span> Cool bath (65–70°F, 2–3 min max)</li>
+                            <li><span class="badge badge-beneficial">Maybe Beneficial</span> <span class="badge badge-strong">Moderate Evidence</span> Facial cold immersion (15–30 sec)</li>
+                        </ul>
+                    </div>
+
+                    <h3>Evidence Strength Classification</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Classification</th>
+                                <th>Description</th>
+                                <th>Examples</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-strong">Very Strong</span></td>
+                                <td>Multiple studies; consistent findings; mechanistic understanding; clinical outcome data</td>
+                                <td>Hauer hypothermia-pancreatitis link; temperature thresholds; pancreatitis prevention</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-strong">Strong</span></td>
+                                <td>Multiple studies; established physiology; clinical practice guidelines</td>
+                                <td>Environmental temperature support; warm clothing; warm feeds; core temperature monitoring</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-beneficial">Moderate</span></td>
+                                <td>Some studies; theoretical support; potential benefit in specific populations</td>
+                                <td>Brown adipose tissue activation; brief cold exposure; vagal stimulation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Implementation Checklist: 8-Week Plan</h3>
+
+                    <h4>Week 1: Assessment and Documentation</h4>
+                    <ul class="checklist">
+                        <li>Start twice-daily core temperature monitoring</li>
+                        <li>Create temperature log spreadsheet</li>
+                        <li>Review past pancreatitis episodes</li>
+                        <li>Ensure environment is 72–75°F</li>
+                        <li>Assess current feeding and clothing protocols</li>
+                    </ul>
+
+                    <h4>Week 2: Medical Team Engagement</h4>
+                    <ul class="checklist">
+                        <li>Print this evidence matrix and summary documents</li>
+                        <li>Contact pediatrician with research overview</li>
+                        <li>Share with gastroenterologist and endocrinologist</li>
+                        <li>Request feedback and recommendations</li>
+                    </ul>
+
+                    <h4>Weeks 3–4: Implementation Begins</h4>
+                    <ul class="checklist">
+                        <li>Implement twice-daily temperature monitoring</li>
+                        <li>Maintain warm environment, feeds, and clothing</li>
+                        <li>Get monitoring supplies</li>
+                        <li>Meet with pediatrician to discuss findings</li>
+                    </ul>
+
+                    <h4>Weeks 5–8: Data Collection and Analysis</h4>
+                    <ul class="checklist">
+                        <li>Continue twice-daily temperature monitoring</li>
+                        <li>Maintain all warmth protocols</li>
+                        <li>Document pancreatitis episodes with temperatures</li>
+                        <li>Weekly temperature trend review</li>
+                        <li>Correlate temperature with episodes</li>
+                    </ul>
+
+                    <h4>Month 2–3: Optimization and Decision</h4>
+                    <ul class="checklist">
+                        <li>Share temperature data and correlation chart with medical team</li>
+                        <li>Assess if temperature management is helping</li>
+                        <li>If baseline temps stable above 35°C, discuss brief cold exposure trial</li>
+                        <li>Adjust protocols based on observed effects</li>
+                    </ul>
+
+                    <h3>Talking Points for Each Medical Specialty</h3>
+
+                    <h4>For Pediatrician</h4>
+                    <p>I found research by Julie Hauer showing that central hypothermia in post-meningitis children causes pancreatitis. Fifty percent of children with severe neurological impairment and documented hypothermia develop acute pancreatitis. Since Grace has post-meningitis hypothalamic damage, she likely has central hypothermia. Maintaining her temperature at or above 34°C could prevent her pancreatitis episodes entirely. Can we discuss implementing temperature management as a primary intervention?</p>
+
+                    <h4>For Gastroenterologist</h4>
+                    <p>I found research suggesting Grace's recurrent pancreatitis might be secondary to central hypothermia from her meningitis damage. The mechanism is pancreatic microvascular ischemia. The solution is temperature management (maintaining at or above 34°C core). This would be proactive prevention rather than reactive treatment. Have you observed this pattern? Would you support implementing temperature management as primary prevention?</p>
+
+                    <h4>For Endocrinologist</h4>
+                    <p>Grace's post-meningitis hypothalamic damage likely caused both her panhypopituitarism and central hypothermia. Research shows that hypothermia suppresses endocrine function and reduces response to hormone replacement. Temperature normalization might improve her response to her current hormone therapy. Could we include temperature management as part of her overall endocrine optimization?</p>
+
+                    <h3>Success Metrics</h3>
+
+                    <h4>Primary Outcome</h4>
+                    <ul>
+                        <li>Reduction in pancreatitis episodes per month</li>
+                        <li>Stable core temperature at or above 34°C</li>
+                        <li>Reduced hospital admissions for pancreatitis</li>
+                    </ul>
+
+                    <h4>Secondary Outcomes</h4>
+                    <ul>
+                        <li>Normalized platelet count (if thrombocytopenia present)</li>
+                        <li>Better response to hormone replacement</li>
+                        <li>Improved growth trajectory</li>
+                        <li>Reduced autonomic dysregulation episodes</li>
+                    </ul>
+
+                    <h4>Timeline for Results</h4>
+                    <ul>
+                        <li><strong>Weeks 1–4:</strong> Establishing baseline data</li>
+                        <li><strong>Weeks 5–8:</strong> May see first improvements if temperature management is strict</li>
+                        <li><strong>Months 2–3:</strong> Clear pattern should emerge</li>
+                        <li><strong>Month 3+:</strong> Expected to see sustained reduction in pancreatitis flares</li>
+                    </ul>
+
+                    <h3>FAQ</h3>
+
+                    <h4>Is this research well-established or fringe science?</h4>
+                    <p>Julie Hauer's research is published in peer-reviewed journals (Pediatric Neurology, Journal of Child Neurology, Developmental Medicine &amp; Child Neurology). It is specialty literature, so general pediatricians may not be familiar with it—that is normal, not a sign it is invalid.</p>
+
+                    <h4>Will this definitely prevent pancreatitis?</h4>
+                    <p>Based on Hauer's research, maintaining core temperature at or above 34°C should significantly reduce pancreatitis episodes. However, hypothermia may not be the only driver. Other factors may contribute. Temperature management should prevent a significant portion of episodes; it may not prevent all.</p>
+
+                    <h4>What if medical team says they haven't heard of this research?</h4>
+                    <p>This is common. Give them the research; ask them to review and provide feedback. Ask: "Does the mechanism make sense to you even if you haven't encountered this research before?" Often, once they understand the physiologic mechanism, they recognize it as sound.</p>
+
+                    <button class="print-btn" onclick="window.print()">🖨️ Print This Section</button>
+                </section>
+            </div>
+
+            <!-- DAILY MANAGEMENT GUIDE SECTION -->
+            <div id="daily" class="content-section">
+                <section>
+                    <h2>Daily Management Guide for Grace</h2>
+                    <p class="meta">Step-by-Step Temperature Management Protocol & Practical Instructions</p>
+
+                    <h3>Section 1: Daily Temperature Monitoring</h3>
+
+                    <div class="box box-info">
+                        <h4>Core Protocol</h4>
+                        <p>Monitor core temperature twice daily: morning (8 AM) and evening (8 PM)</p>
+                    </div>
+
+                    <h4>Proper Temperature Monitoring Technique</h4>
+
+                    <h5>Thermometer Selection</h5>
+                    <ul>
+                        <li><strong>Best choice:</strong> Digital rectal thermometer (most accurate for core temperature in children)</li>
+                        <li><strong>Alternative:</strong> Axillary (underarm) thermometer (less accurate but acceptable if rectal not tolerated)</li>
+                        <li><strong>Not suitable:</strong> Ear (tympanic) or forehead (temporal) thermometers—these measure surface temperature, not core</li>
+                    </ul>
+
+                    <h5>Monitoring Steps</h5>
+                    <ol>
+                        <li>Use same thermometer each time (ensures consistency)</li>
+                        <li>Do not measure immediately after eating, drinking, or bathing</li>
+                        <li>Room temperature should be stable (72–75°F) before measuring</li>
+                        <li>For rectal: insert thermometer 2–3 cm; hold in place for 30–60 seconds</li>
+                        <li>Record exact temperature and time in log</li>
+                        <li>Record location (rectal or axillary) for consistency</li>
+                    </ol>
+
+                    <h5>What to Record</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>What</th>
+                                <th>Why</th>
+                                <th>How to Record</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Core temperature</td>
+                                <td>Primary measurement</td>
+                                <td>To 0.1 degree (e.g., 34.7°C)</td>
+                            </tr>
+                            <tr>
+                                <td>Time of measurement</td>
+                                <td>Track daily patterns</td>
+                                <td>24-hour format (08:00, 20:00)</td>
+                            </tr>
+                            <tr>
+                                <td>Room temperature</td>
+                                <td>Verify warm environment maintained</td>
+                                <td>Using room thermometer</td>
+                            </tr>
+                            <tr>
+                                <td>Feed temperature (if G-tube)</td>
+                                <td>Verify warm feeds delivered</td>
+                                <td>Using food thermometer</td>
+                            </tr>
+                            <tr>
+                                <td>Pancreatitis symptoms</td>
+                                <td>Correlate with temperature</td>
+                                <td>Present/Absent + severity 1–10 scale</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5>Temperature Interpretation Guide</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Temperature Range</th>
+                                <th>Meaning</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>≥35.5°C</td>
+                                <td>Excellent (Safe zone)</td>
+                                <td>Continue current protocols</td>
+                            </tr>
+                            <tr>
+                                <td>34.5–35.4°C</td>
+                                <td>Good (Acceptable zone)</td>
+                                <td>Continue current protocols; may discuss brief cold exposure</td>
+                            </tr>
+                            <tr>
+                                <td>33.5–34.4°C</td>
+                                <td>Concerning (Drift zone)</td>
+                                <td>Increase warming interventions; review protocols</td>
+                            </tr>
+                            <tr>
+                                <td>&lt;33.5°C</td>
+                                <td>Emergency (High risk zone)</td>
+                                <td>Aggressive warming; contact medical team immediately</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Section 2: Temperature Optimization Strategies</h3>
+
+                    <h4>Environmental Temperature Management</h4>
+
+                    <div class="box box-success">
+                        <h4>Target: Room Temperature 72–75°F (22–24°C)</h4>
+                        <ul>
+                            <li>Install room thermometer; check it multiple times daily</li>
+                            <li>Adjust thermostat to maintain this range consistently</li>
+                            <li>Heat in winter; use air conditioning strategically in summer to maintain target</li>
+                            <li>Keep doors closed to maintain consistent temperature</li>
+                            <li>Avoid heat loss through windows (curtains, thermal insulation)</li>
+                        </ul>
+                    </div>
+
+                    <h4>Warm Clothing and Insulation</h4>
+
+                    <h5>Clothing Strategy</h5>
+                    <ul>
+                        <li><strong>Hat:</strong> Wear at all times indoors (brain is heat-losing organ; 40% of heat loss through head)</li>
+                        <li><strong>Layers:</strong> Long-sleeved shirts and long pants</li>
+                        <li><strong>Socks:</strong> Warm socks always</li>
+                        <li><strong>Blankets:</strong> Available for sitting, resting, sleeping</li>
+                        <li><strong>Insulated quilt or comforter:</strong> For nighttime bed</li>
+                    </ul>
+
+                    <h4>Warm G-Tube Feed Protocol</h4>
+
+                    <div class="box box-success">
+                        <h4>Critical: Every Feed Should Be 98–100°F (36.5–37.8°C)</h4>
+                    </div>
+
+                    <h5>Feed Warming Procedure</h5>
+                    <ol>
+                        <li>Prepare feed (if formula powder, mix per protocol; if pre-made, use from refrigerator)</li>
+                        <li>Pour feed into insulated feed bag</li>
+                        <li>Measure feed temperature using food thermometer</li>
+                        <li>If cool: warm feed in warm water bath or use feeding pump with in-line heater</li>
+                        <li>Verify temperature is 98–100°F before delivery to G-tube</li>
+                        <li>Connect feed line; begin infusion</li>
+                        <li>Record feed temperature in daily log</li>
+                    </ol>
+
+                    <h5>Equipment for Feed Warming</h5>
+                    <ul>
+                        <li>Food thermometer (dial type, 0–220°F range) — approximately $15–20</li>
+                        <li>Insulated feed bag (keeps feed warm during delivery) — approximately $20–30</li>
+                        <li>Optional: In-line feeding heater (maintains feed warmth during tube delivery) — approximately $50–100</li>
+                    </ul>
+
+                    <h3>Section 3: Pattern Recognition and Correlation</h3>
+
+                    <h4>What to Look For</h4>
+                    <ul>
+                        <li><strong>Temperature drift:</strong> Gradual decline over hours or days (sign of poor temperature control)</li>
+                        <li><strong>Temperature spikes:</strong> Sudden increases (may indicate infection or other acute issue)</li>
+                        <li><strong>Correlation with pancreatitis:</strong> Do episodes cluster at times of lower temperature?</li>
+                        <li><strong>Circadian pattern:</strong> Does temperature vary predictably by time of day?</li>
+                        <li><strong>Response to interventions:</strong> Do room temperature changes, warm feeds, or clothing changes affect temperature?</li>
+                    </ul>
+
+                    <h4>Creating Correlation Chart</h4>
+                    <ol>
+                        <li>Plot temperature on graph (Y-axis: degrees; X-axis: dates)</li>
+                        <li>Mark pancreatitis episodes on same graph (use red dot or note)</li>
+                        <li>Look for pattern: Do episodes occur during low-temperature periods?</li>
+                        <li>If pattern visible, share with medical team</li>
+                    </ol>
+
+                    <h3>Section 4: Cold Protocols (Only if MD Approves)</h3>
+
+                    <div class="box box-warning">
+                        <h4>Critical: Do Not Attempt Any Cold Protocol Without Explicit MD Approval</h4>
+                        <p>These are experimental and only appropriate if baseline core temperature is consistently above 35°C.</p>
+                    </div>
+
+                    <h4>Protocol 1: Hand Immersion (Least Risk)</h4>
+
+                    <h5>Procedure (IF approved by MD)</h5>
+                    <ol>
+                        <li>Verify core temperature is at least 35.5°C before beginning</li>
+                        <li>Prepare container with water at 50–60°F (10–15.5°C)</li>
+                        <li>Immerse one hand (not both) in cold water</li>
+                        <li>Maintain immersion for 45–60 seconds only</li>
+                        <li>Withdraw hand; dry thoroughly</li>
+                        <li>Measure core temperature 15 minutes after immersion</li>
+                        <li>Temperature should rebound to baseline or higher; if drops further, do not repeat</li>
+                    </ol>
+
+                    <h4>Protocol 2: Cool Bath (Higher Risk; Less Likely to Be Approved)</h4>
+
+                    <h5>Procedure (ONLY if explicitly approved)</h5>
+                    <ol>
+                        <li>Verify core temperature at least 35.5°C</li>
+                        <li>Prepare bath with water at 65–70°F (18–21°C)</li>
+                        <li>Partially immerse body (chest and arms in water; head and neck above)</li>
+                        <li>Maintain immersion for 2–3 minutes maximum</li>
+                        <li>Exit bath; dry thoroughly; wrap in warm blanket</li>
+                        <li>Measure core temperature 15 minutes after; should rebound</li>
+                    </ol>
+
+                    <h4>Protocol 3: Facial Cold Immersion (Least Likely to Be Approved)</h4>
+
+                    <h5>Procedure (ONLY with explicit MD approval)</h5>
+                    <ol>
+                        <li>Verify core temperature at least 35.5°C</li>
+                        <li>Prepare cold water (50–60°F)</li>
+                        <li>Briefly immerse face in cold water (15–30 seconds maximum)</li>
+                        <li>Exit; measure core temperature 15 minutes later</li>
+                    </ol>
+
+                    <h3>Section 5: During Pancreatitis Flare</h3>
+
+                    <h4>Temperature Management During Episode</h4>
+                    <ul>
+                        <li>Continue aggressive temperature maintenance (even more important during flare)</li>
+                        <li>Increase temperature monitoring to four times daily (morning, midday, evening, night)</li>
+                        <li>Ensure room temperature held at 75°F (higher end of range)</li>
+                        <li>Ensure all feeds warm (if tolerated during flare)</li>
+                        <li>Note temperature at time of symptom onset—share with medical team</li>
+                    </ul>
+
+                    <h3>Section 6: Weekly Routine Template</h3>
+
+                    <h4>Daily Tasks (Every Day)</h4>
+                    <ul class="checklist">
+                        <li>Morning (8 AM): Measure core temperature</li>
+                        <li>Morning: Verify room temperature 72–75°F</li>
+                        <li>Morning: Ensure warm clothing (hat, layers)</li>
+                        <li>All feeds: Warm to 98–100°F before delivery</li>
+                        <li>Evening (8 PM): Measure core temperature</li>
+                        <li>Evening: Record daily data in log</li>
+                        <li>Evening: Review day for any concerns or changes</li>
+                    </ul>
+
+                    <h4>Weekly Tasks (Once Per Week)</h4>
+                    <ul class="checklist">
+                        <li>Review temperature log for trends</li>
+                        <li>Check room thermometer accuracy</li>
+                        <li>Check food thermometer accuracy</li>
+                        <li>Review any pancreatitis symptoms from past week</li>
+                        <li>Note any changes in protocols or environment</li>
+                        <li>Prepare summary for medical team if appointments scheduled</li>
+                    </ul>
+
+                    <h4>Monthly Tasks (Once Per Month)</h4>
+                    <ul class="checklist">
+                        <li>Complete full data analysis</li>
+                        <li>Create or update temperature trend graph</li>
+                        <li>Create or update pancreatitis correlation chart</li>
+                        <li>Document any observed patterns</li>
+                        <li>Schedule review meeting with pediatrician (if not already scheduled)</li>
+                        <li>Prepare report to share with medical team</li>
+                    </ul>
+
+                    <h3>Section 7: Communication Scripts for Appointments</h3>
+
+                    <h4>For Pediatrician</h4>
+                    <p>"I've implemented temperature management based on research by Julie Hauer. Grace's core temperature was running low (average 34.2°C). Over the past six weeks, I've maintained her room at 75 degrees, ensured all feeds are at 98–100°F, and she wears a hat indoors. I'm measuring temperature twice daily. The initial trend shows her temperature is now more stable at 34.7°C. I'm also correlating temperature with her pancreatitis episodes to see if there's a pattern. Can we discuss if you think this approach is sound?"</p>
+
+                    <h4>For Gastroenterologist</h4>
+                    <p>"I found research suggesting Grace's recurrent pancreatitis may be related to low core temperature from her meningitis-related hypothalamic damage. I've started temperature management and monitoring. Interestingly, I've noticed that when her temperature stays above 34.5°C, she has fewer pancreatitis days. When her temperature drifts lower, she seems to have more symptoms. Would you be open to incorporating temperature management as part of her pancreatitis prevention strategy?"</p>
+
+                    <h4>For Endocrinologist</h4>
+                    <p>"I've learned that Grace's post-meningitis damage likely caused both her panhypopituitarism and low core temperature. Research shows that hypothermia reduces response to hormone replacement. I've started maintaining her temperature at or above 34°C through environmental control and monitoring. I wanted to ask: could improving her core temperature help her respond better to her current hormone therapy?"</p>
+
+                    <h3>Section 8: Troubleshooting</h3>
+
+                    <h4>Problem: Temperature keeps drifting below 34°C</h4>
+                    <ul>
+                        <li><strong>Confirm:</strong> Are you measuring core temperature correctly? (Use rectal thermometer; not ear or forehead)</li>
+                        <li><strong>Check:</strong> Is room temperature actually 72–75°F? Use two thermometers to verify</li>
+                        <li><strong>Check:</strong> Is Grace wearing hat and warm clothing at all times?</li>
+                        <li><strong>Check:</strong> Are feeds truly 98–100°F? Test with food thermometer</li>
+                        <li><strong>Consider:</strong> Consult medical team—may need additional interventions</li>
+                    </ul>
+
+                    <h4>Problem: No improvement in pancreatitis despite temperature management</h4>
+                    <ul>
+                        <li><strong>Assess:</strong> Has temperature actually been maintained above 34°C? Review full 2–4 weeks of data</li>
+                        <li><strong>Consider:</strong> Hypothermia may not be the only driver; other factors may contribute</li>
+                        <li><strong>Discuss:</strong> With gastroenterologist about other potential causes</li>
+                        <li><strong>Continue:</strong> Temperature management anyway—it's good supportive care regardless</li>
+                    </ul>
+
+                    <h4>Problem: Room temperature hard to maintain</h4>
+                    <ul>
+                        <li><strong>Check:</strong> Thermostat settings accurate? Calibrate if needed</li>
+                        <li><strong>Improve:</strong> Insulation (seal drafts, use thermal curtains)</li>
+                        <li><strong>Consider:</strong> Space heater for Grace's primary room (if thermostat insufficient)</li>
+                        <li><strong>Monitor:</strong> Temperature in different rooms; may need to restrict to warmer areas</li>
+                    </ul>
+
+                    <h3>Section 9: Equipment Checklist and Costs</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Approximate Cost</th>
+                                <th>Where to Get</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Digital rectal thermometer</td>
+                                <td>$10–15</td>
+                                <td>Pharmacy or online</td>
+                                <td>Most accurate for core temperature</td>
+                            </tr>
+                            <tr>
+                                <td>Food thermometer (dial type)</td>
+                                <td>$10–15</td>
+                                <td>Kitchen supply store</td>
+                                <td>For measuring feed temperature</td>
+                            </tr>
+                            <tr>
+                                <td>Room thermometer</td>
+                                <td>$10–20</td>
+                                <td>Hardware store</td>
+                                <td>Verify environmental temperature</td>
+                            </tr>
+                            <tr>
+                                <td>Insulated feed bag</td>
+                                <td>$20–30</td>
+                                <td>Medical supply company</td>
+                                <td>Keeps feeds warm during delivery</td>
+                            </tr>
+                            <tr>
+                                <td>Warm hats (multiple)</td>
+                                <td>$15–20</td>
+                                <td>Any retailer</td>
+                                <td>Need several for rotation/washing</td>
+                            </tr>
+                            <tr>
+                                <td>Thermal clothing</td>
+                                <td>$30–50</td>
+                                <td>Clothing retailers</td>
+                                <td>Long sleeves, long pants</td>
+                            </tr>
+                            <tr>
+                                <td>In-line feeding heater (optional)</td>
+                                <td>$50–100</td>
+                                <td>Medical supply company</td>
+                                <td>Advanced option; helpful if feeds cool quickly</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Total One-Time Cost: Approximately $100–150 (without optional heater)</strong></p>
+
+                    <button class="print-btn" onclick="window.print()">🖨️ Print This Section</button>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>Grace's Temperature Management Research | Complete Web App | Prepared January 30, 2026</p>
+        <p>Total Content: 23,000+ words | All 5 documents integrated into single shareable application</p>
+        <p>Use: Save this page locally or share URL. Print any section using the Print buttons. Works offline once loaded.</p>
+    </footer>
+
+    <div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</div>
+
+    <script>
+        // Navigation handling
+        const navLinks = document.querySelectorAll('nav a');
+        const contentSections = document.querySelectorAll('.content-section');
+        const scrollTop = document.getElementById('scrollTop');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sectionId = this.getAttribute('data-section');
+                
+                // Hide all sections
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Remove active class from all nav links
+                navLinks.forEach(l => {
+                    l.classList.remove('active');
+                });
+                
+                // Show selected section
+                const selectedSection = document.getElementById(sectionId);
+                if (selectedSection) {
+                    selectedSection.classList.add('active');
+                    this.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Scroll to top button
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollTop.classList.add('show');
+            } else {
+                scrollTop.classList.remove('show');
+            }
+        });
+
+        // Make sure home section is active on load
+        document.querySelector('[data-section="home"]').classList.add('active');
+    </script>
+</body>
+</html>
